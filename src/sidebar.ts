@@ -19,7 +19,8 @@ function createRollBadge(roll: SavedProvidenceRoll): HTMLSpanElement {
   const badge = document.createElement('span');
   badge.className = 'pf2e-providence-value';
   badge.textContent = String(roll.value);
-  badge.title = game.i18n.format(`${MODULE_ID}.panel.savedBy`, { actor: roll.actorName });
+  if (roll.used) badge.classList.add('is-used');
+  badge.title = game.i18n.format(`${MODULE_ID}.panel.${roll.used ? 'used' : 'savedBy'}`, { actor: roll.actorName });
   return badge;
 }
 
@@ -109,7 +110,7 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
       rollIcon.ariaHidden = 'true';
       rollButton.append(rollIcon);
       rollButton.addEventListener('click', () => void rollProvidence(actor).catch(notifyError));
-      heading.append(name, rollButton);
+      heading.append(name);
 
       const type = document.createElement('span');
       type.className = 'pf2e-providence-actor-type';
@@ -127,7 +128,7 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
       }
 
       details.append(heading, type, values);
-      row.append(image, details);
+      row.append(image, details, rollButton);
       list.append(row);
     }
 

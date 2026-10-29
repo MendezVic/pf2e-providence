@@ -4,6 +4,7 @@ export interface SavedProvidenceRoll {
   actorUuid: string;
   actorName: string;
   createdAt: number;
+  used?: boolean;
 }
 
 export function validateProvidenceValues(value: unknown): [number, number] {
@@ -20,7 +21,8 @@ export function isSavedProvidenceRoll(value: unknown): value is SavedProvidenceR
     && Number.isInteger(roll.value) && (roll.value ?? 0) >= 1 && (roll.value ?? 0) <= 20
     && typeof roll.actorUuid === 'string'
     && typeof roll.actorName === 'string'
-    && Number.isFinite(roll.createdAt);
+    && Number.isFinite(roll.createdAt)
+    && (roll.used === undefined || typeof roll.used === 'boolean');
 }
 
 export function sanitizePool(value: unknown): SavedProvidenceRoll[] {
@@ -34,10 +36,10 @@ export function filterSavedRollsByActorUuids(
   return pool.filter((roll) => actorUuids.has(roll.actorUuid));
 }
 
-export function takeSavedRoll(pool: readonly SavedProvidenceRoll[], id: string): { pool: SavedProvidenceRoll[]; roll: SavedProvidenceRoll } {
+export function markSavedRollUsed(pool: readonly SavedProvidenceRoll[], id: string): SavedProvidenceRoll[] {
   const roll = pool.find((candidate) => candidate.id === id);
-  if (!roll) throw new Error('Providence roll unavailable.');
-  return { roll, pool: pool.filter((candidate) => candidate.id !== id) };
+  if (!roll || roll.used) throw new Error('Providence roll unavailable.');
+  return pool.map((candidate) => candidate.id === id ? { ...candidate, used: true } : candidate);
 }
 
 export function groupSavedRolls(pool: readonly SavedProvidenceRoll[]): Map<string, SavedProvidenceRoll[]> {

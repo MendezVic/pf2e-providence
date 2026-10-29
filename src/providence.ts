@@ -1,8 +1,8 @@
 import { MODULE_ID } from './constants';
 import {
   filterSavedRollsByActorUuids,
+  markSavedRollUsed,
   sanitizePool,
-  takeSavedRoll,
   validateProvidenceValues,
   type SavedProvidenceRoll,
 } from './pool';
@@ -64,7 +64,7 @@ export function getSavedRolls(): SavedProvidenceRoll[] {
 }
 
 function getUsableSavedRolls(): SavedProvidenceRoll[] {
-  return filterSavedRollsByActorUuids(getSavedRolls(), getSelectedActorUuids());
+  return filterSavedRollsByActorUuids(getSavedRolls(), getSelectedActorUuids()).filter((roll) => !roll.used);
 }
 
 function serialized<T>(operation: () => Promise<T>): Promise<T> {
@@ -118,9 +118,13 @@ async function handleRequest(request: SocketRequest): Promise<OperationResult> {
       }
       const createdAt = Date.now();
       const additions = values.map((value) => ({
-        id: foundry.utils.randomID(), value, actorUuid: actor.uuid, actorName: actor.name, createdAt,
+        id: foundry.utils.randomID(), value, actorUuid: actor.uuid, actorName: actor.name, createdAt, used: false,
       }));
-      return { rolls: await setPool([...getSavedRolls(), ...additions]), added: additions };
+      if ([...reservations.values()].some((item) => item.roll.actorUuid === actor.uuid)) {
+        throw new Error(localize('error.rollUnavailable'));
+      }
+      const otherActors = getSavedRolls().filter((roll) => roll.actorUuid !== actor.uuid);
+      return { rolls: await setPool([...otherActors, ...additions]), added: additions };
     }
     throw new Error(localize('error.invalidRequest'));
   });
@@ -157,15 +161,15 @@ async function useSavedRoll(request: SocketRequest, user: User): Promise<Operati
     await performProvidenceReroll(message, reservation);
     return await serialized(async () => {
       if (reservations.get(reservation.id) !== reservation) throw new Error(localize('error.invalidReservation'));
-      let taken: ReturnType<typeof takeSavedRoll>;
+      let rolls: SavedProvidenceRoll[];
       try {
-        taken = takeSavedRoll(getSavedRolls(), reservation.roll.id);
+        rolls = markSavedRollUsed(getSavedRolls(), reservation.roll.id);
       } catch {
         throw new Error(localize('error.rollUnavailable'));
       }
       window.clearTimeout(reservation.timeout);
       reservations.delete(reservation.id);
-      return { rolls: await setPool(taken.pool) };
+      return { rolls: await setPool(rolls) };
     });
   } catch (error) {
     await clearReservation(reservation.id);

@@ -3,7 +3,7 @@
     "chat": { "roll": "Providence: {actor} saves d20 results: {results}." },
     "context": { "use": "Use a Providence Roll" },
     "dialog": { "title": "Use a Providence Roll", "prompt": "Choose a saved d20 result to use for this reroll.", "cancel": "Cancel" },
-    "panel": { "empty": "No Providence rolls are currently saved.", "savedBy": "Saved by {actor}", "noneForActor": "No saved rolls" },
+    "panel": { "empty": "No Providence rolls are currently saved.", "savedBy": "Saved by {actor}", "used": "Used roll from {actor}", "noneForActor": "No saved rolls" },
     "sidebar": {
       "title": "Providence",
       "description": "Choose an actor to roll two Providence d20s. Saved results are shared by the campaign.",

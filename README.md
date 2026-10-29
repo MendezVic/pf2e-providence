@@ -10,8 +10,9 @@ reroll. The pool belongs to the campaign rather than to one actor: any saved val
 can replace any eligible check, including an enemy's check.
 
 Pool changes and rerolls are handled by the active GM client. A value is reserved
-while its reroll runs and is removed only after PF2e completes that reroll, so failed
-or competing requests do not lose saved results.
+while its reroll runs and is marked used only after PF2e completes that reroll, so
+failed or competing requests do not lose saved results. Used values remain visible
+in red with a strike-through until that actor rolls a fresh pair.
 
 ## Development
 
