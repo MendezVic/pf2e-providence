@@ -6,7 +6,7 @@ import {
   validateProvidenceValues,
   type SavedProvidenceRoll,
 } from './pool';
-import { forceD20Result, hasRerollMarker, markReroll } from './reroll';
+import { forceD20Result, hasRerollMarker, isProvidenceReroll, markReroll } from './reroll';
 import { getSelectedActorUuids } from './selected-actors';
 
 const SETTING = 'saved-rolls';
@@ -300,5 +300,12 @@ export function registerProvidenceContextMenu(): void {
         if (message) void useProvidence(message).catch((error: unknown) => ui.notifications.error(errorMessage(error)));
       },
     });
+  });
+}
+
+export function registerDiceSoNiceSuppression(): void {
+  Hooks.on('diceSoNiceMessagePreProcess', (messageId: string, animation: { willTrigger3DRoll: boolean }) => {
+    const roll = game.messages.get(messageId)?.rolls[0] as (Roll & { options?: Record<string, unknown> }) | undefined;
+    if (roll && isProvidenceReroll(roll)) animation.willTrigger3DRoll = false;
   });
 }

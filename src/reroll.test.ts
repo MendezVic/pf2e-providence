@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { forceD20Result, hasRerollMarker, markReroll } from './reroll';
+import { forceD20Result, hasRerollMarker, isProvidenceReroll, markReroll } from './reroll';
 
 describe('Providence reroll adapter', () => {
   it('changes the active d20 and recomputes the roll total', () => {
@@ -34,5 +34,7 @@ describe('Providence reroll adapter', () => {
     markReroll(roll, 'reservation-a');
     expect(hasRerollMarker(roll, 'reservation-a')).toBe(true);
     expect(hasRerollMarker(roll, 'reservation-b')).toBe(false);
+    expect(isProvidenceReroll(roll)).toBe(true);
+    expect(isProvidenceReroll({ options: {} })).toBe(false);
   });
 });

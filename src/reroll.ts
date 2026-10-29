@@ -39,3 +39,8 @@ export function markReroll(roll: { options?: Record<string, unknown> }, reservat
 export function hasRerollMarker(roll: { options?: Record<string, unknown> }, reservationId: string): boolean {
   return roll.options?.[REROLL_MARKER] === reservationId;
 }
+
+export function isProvidenceReroll(roll: { options?: Record<string, unknown> }): boolean {
+  const marker = roll.options?.[REROLL_MARKER];
+  return typeof marker === 'string' && marker.length > 0;
+}
