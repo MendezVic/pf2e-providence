@@ -103,8 +103,7 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
       const rollButton = document.createElement('button');
       rollButton.type = 'button';
       rollButton.className = 'pf2e-providence-roll';
-      rollButton.dataset.tooltip = game.i18n.format(`${MODULE_ID}.sidebar.rollFor`, { actor: actor.name });
-      rollButton.ariaLabel = rollButton.dataset.tooltip;
+      rollButton.ariaLabel = game.i18n.format(`${MODULE_ID}.sidebar.rollFor`, { actor: actor.name });
       const rollIcon = document.createElement('i');
       rollIcon.className = 'fa-solid fa-dice';
       rollIcon.ariaHidden = 'true';
