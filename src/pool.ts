@@ -27,6 +27,13 @@ export function sanitizePool(value: unknown): SavedProvidenceRoll[] {
   return Array.isArray(value) ? value.filter(isSavedProvidenceRoll) : [];
 }
 
+export function filterSavedRollsByActorUuids(
+  pool: readonly SavedProvidenceRoll[],
+  actorUuids: ReadonlySet<string>,
+): SavedProvidenceRoll[] {
+  return pool.filter((roll) => actorUuids.has(roll.actorUuid));
+}
+
 export function takeSavedRoll(pool: readonly SavedProvidenceRoll[], id: string): { pool: SavedProvidenceRoll[]; roll: SavedProvidenceRoll } {
   const roll = pool.find((candidate) => candidate.id === id);
   if (!roll) throw new Error('Providence roll unavailable.');

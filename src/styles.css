@@ -77,7 +77,26 @@
 }
 
 #pf2e-providence .pf2e-providence-roll {
-  flex: 0 0 1.75rem;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: inline-flex;
+  flex: 0 0 2rem;
+  font-size: var(--font-size-16);
+  height: 2rem;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 2rem;
+}
+
+#pf2e-providence .pf2e-providence-roll:hover,
+#pf2e-providence .pf2e-providence-roll:focus-visible {
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-accent);
 }
 
 #pf2e-providence .pf2e-providence-actor-type {

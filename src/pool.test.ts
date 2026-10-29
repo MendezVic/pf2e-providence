@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { groupSavedRolls, sanitizePool, takeSavedRoll, validateProvidenceValues, type SavedProvidenceRoll } from './pool';
+import {
+  filterSavedRollsByActorUuids,
+  groupSavedRolls,
+  sanitizePool,
+  takeSavedRoll,
+  validateProvidenceValues,
+  type SavedProvidenceRoll,
+} from './pool';
 
 const rolls: SavedProvidenceRoll[] = [
   { id: 'a', value: 10, actorUuid: 'Actor.1', actorName: 'One', createdAt: 1 },
@@ -25,5 +32,10 @@ describe('Providence pool', () => {
   it('groups rolls by actor UUID and rejects malformed stored data', () => {
     expect(groupSavedRolls(rolls).get('Actor.1')).toHaveLength(2);
     expect(sanitizePool([...rolls, { id: 'bad', value: 99 }])).toEqual(rolls);
+  });
+
+  it('only exposes rolls belonging to selected actors', () => {
+    expect(filterSavedRollsByActorUuids(rolls, new Set(['Actor.2']))).toEqual([rolls[2]]);
+    expect(filterSavedRollsByActorUuids(rolls, new Set())).toEqual([]);
   });
 });

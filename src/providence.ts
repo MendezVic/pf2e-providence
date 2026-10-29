@@ -1,6 +1,13 @@
 import { MODULE_ID } from './constants';
-import { sanitizePool, takeSavedRoll, validateProvidenceValues, type SavedProvidenceRoll } from './pool';
+import {
+  filterSavedRollsByActorUuids,
+  sanitizePool,
+  takeSavedRoll,
+  validateProvidenceValues,
+  type SavedProvidenceRoll,
+} from './pool';
 import { forceD20Result, hasRerollMarker, markReroll } from './reroll';
+import { getSelectedActorUuids } from './selected-actors';
 
 const SETTING = 'saved-rolls';
 const CHANNEL = `module.${MODULE_ID}`;
@@ -54,6 +61,10 @@ function errorMessage(error: unknown): string {
 
 export function getSavedRolls(): SavedProvidenceRoll[] {
   return sanitizePool(game.settings.get(MODULE_ID, SETTING));
+}
+
+function getUsableSavedRolls(): SavedProvidenceRoll[] {
+  return filterSavedRollsByActorUuids(getSavedRolls(), getSelectedActorUuids());
 }
 
 function serialized<T>(operation: () => Promise<T>): Promise<T> {
@@ -128,7 +139,7 @@ async function useSavedRoll(request: SocketRequest, user: User): Promise<Operati
   const message = messageForReservation(request.messageId);
   if (!request.rollId) throw new Error(localize('error.invalidRequest'));
   const reservation = await serialized(async () => {
-    const roll = getSavedRolls().find((candidate) => candidate.id === request.rollId);
+    const roll = getUsableSavedRolls().find((candidate) => candidate.id === request.rollId);
     if (!roll || [...reservations.values()].some((item) => item.roll.id === roll.id)) {
       throw new Error(localize('error.rollUnavailable'));
     }
@@ -223,22 +234,22 @@ export async function rollProvidence(actor?: Actor | null): Promise<SavedProvide
 }
 
 function canUse(message: ChatMessage): boolean {
-  return getSavedRolls().length > 0 && isProvidenceRerollable(message);
+  return getUsableSavedRolls().length > 0 && isProvidenceRerollable(message);
 }
 
 async function chooseRoll(): Promise<SavedProvidenceRoll | null> {
-  const saved = getSavedRolls();
+  const saved = getUsableSavedRolls();
   if (saved.length === 0) return null;
   const options = saved.map((roll) => `<option value="${roll.id}">${roll.value} — ${foundry.utils.escapeHTML(roll.actorName)}</option>`).join('');
   const id = await foundry.applications.api.DialogV2.wait({
     window: { title: localize('dialog.title') },
     content: `<p>${localize('dialog.prompt')}</p><select name="roll-id">${options}</select>`,
     buttons: [
+      { action: 'cancel', label: `${MODULE_ID}.dialog.cancel` },
       {
-        action: 'use', label: `${MODULE_ID}.context.use`, icon: 'fa-solid fa-dice-d20', default: true,
+        action: 'use', label: `${MODULE_ID}.context.use`, icon: 'fa-solid fa-dice', default: true,
         callback: (_event, button) => (button.form?.elements.namedItem('roll-id') as HTMLSelectElement | null)?.value ?? null,
       },
-      { action: 'cancel', label: `${MODULE_ID}.dialog.cancel` },
     ],
     rejectClose: false,
   });
@@ -282,7 +293,7 @@ export function registerProvidenceContextMenu(): void {
   Hooks.on('getChatMessageContextOptions', (_html: HTMLElement, options: ContextOption[]) => {
     options.push({
       label: localize('context.use'),
-      icon: '<i class="fa-solid fa-dice-d20"></i>',
+      icon: '<i class="fa-solid fa-dice"></i>',
       visible: (entry) => Boolean(messageFromEntry(entry) && canUse(messageFromEntry(entry) as ChatMessage)),
       onClick: (_event, entry) => {
         const message = messageFromEntry(entry);

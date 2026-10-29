@@ -1,6 +1,6 @@
 {
   "name": "pf2e-providence",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "type": "module",
   "description": "Campaign-wide saved d20 rolls for Pathfinder 2e.",
