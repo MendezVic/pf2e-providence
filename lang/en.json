@@ -1,0 +1,10 @@
+{
+  "pf2e-providence": {
+    "chat": { "roll": "Providence: {actor} saves d20 results: {results}." },
+    "context": { "use": "Use a Providence Roll" },
+    "dialog": { "title": "Use a Providence Roll", "prompt": "Choose a saved d20 result to use for this reroll." },
+    "panel": { "empty": "No Providence rolls are currently saved." },
+    "sidebar": { "title": "Providence", "description": "Roll two d20 for an actor or spend a saved result on any check.", "actor": "Actor", "roll": "Roll Providence (2d20)", "pool": "Saved Rolls" },
+    "error": { "noActor": "Choose an actor before rolling Providence.", "notCheck": "Providence can only be used on an unre-rolled PF2e check.", "noGm": "No active GM is available to update the Providence pool." }
+  }
+}

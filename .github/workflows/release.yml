@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - name: Create module archive
+        run: |
+          mkdir -p release/pf2e-providence
+          cp module.json LICENSE README.md release/pf2e-providence/
+          cp -R dist lang release/pf2e-providence/
+          cd release
+          zip -r pf2e-providence.zip pf2e-providence
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            module.json
+            release/pf2e-providence.zip
