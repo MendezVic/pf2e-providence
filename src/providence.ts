@@ -279,7 +279,7 @@ function messageFromEntry(entry: HTMLElement): ChatMessage | null {
 }
 
 export function registerProvidenceContextMenu(): void {
-  Hooks.on('getChatLogEntryContext', (_html: HTMLElement, options: ContextOption[]) => {
+  Hooks.on('getChatMessageContextOptions', (_html: HTMLElement, options: ContextOption[]) => {
     options.push({
       label: localize('context.use'),
       icon: '<i class="fa-solid fa-dice-d20"></i>',

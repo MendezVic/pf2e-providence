@@ -9,7 +9,7 @@
       "description": "Choose an actor to roll two Providence d20s. Saved results are shared by the campaign.",
       "search": "Search actors",
       "clearSearch": "Clear actor search",
-      "noActors": "No visible actors are available.",
+      "noActors": "You do not have any playable actors.",
       "rollFor": "Roll Providence for {actor}"
     },
     "setting": { "savedRolls": { "name": "Providence saved rolls", "hint": "The campaign-wide pool of saved Providence d20 results." } },

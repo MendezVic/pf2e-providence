@@ -64,7 +64,7 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
     list.className = 'directory-list pf2e-providence-actor-list';
     const rollsByActor = groupSavedRolls(getSavedRolls());
     const actors = game.actors
-      .filter((actor) => actor.visible)
+      .filter((actor) => actor.hasPlayerOwner && actor.testUserPermission(game.user, 'OWNER'))
       .sort((left, right) => left.name.localeCompare(right.name, game.i18n.lang));
 
     if (actors.length === 0) {
@@ -97,15 +97,11 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
       name.title = actor.name;
       name.addEventListener('click', () => void actor.sheet?.render(true));
 
-      const canRoll = game.user.isGM || actor.testUserPermission(game.user, 'OWNER');
       const rollButton = document.createElement('button');
       rollButton.type = 'button';
       rollButton.className = 'inline-control icon fa-solid fa-dice-d20 pf2e-providence-roll';
-      rollButton.dataset.tooltip = canRoll
-        ? game.i18n.format(`${MODULE_ID}.sidebar.rollFor`, { actor: actor.name })
-        : localize('error.noPermission');
+      rollButton.dataset.tooltip = game.i18n.format(`${MODULE_ID}.sidebar.rollFor`, { actor: actor.name });
       rollButton.ariaLabel = rollButton.dataset.tooltip;
-      rollButton.disabled = !canRoll;
       rollButton.addEventListener('click', () => void rollProvidence(actor).catch(notifyError));
       heading.append(name, rollButton);
 
