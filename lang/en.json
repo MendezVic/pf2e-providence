@@ -12,7 +12,17 @@
       "noActors": "You do not have any playable actors.",
       "rollFor": "Roll Providence for {actor}"
     },
-    "setting": { "savedRolls": { "name": "Providence saved rolls", "hint": "The campaign-wide pool of saved Providence d20 results." } },
+    "setting": {
+      "savedRolls": { "name": "Providence saved rolls", "hint": "The campaign-wide pool of saved Providence d20 results." },
+      "actors": {
+        "name": "Providence Actors",
+        "label": "Select Actors",
+        "hint": "Choose which world actors appear in the Providence sidebar.",
+        "search": "Search Actor Directory",
+        "empty": "The Actor Directory is empty.",
+        "save": "Save Selected Actors"
+      }
+    },
     "error": {
       "noActor": "Choose an actor before rolling Providence.",
       "notCheck": "Providence can only be used on an unre-rolled PF2e check.",

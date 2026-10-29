@@ -1,8 +1,12 @@
 import './styles.css';
+import { registerActorSelectionSetting } from './actor-selection';
 import { MODULE_ID } from './constants';
 import { getSavedRolls, registerProvidenceContextMenu, registerProvidenceSocket, rollProvidence } from './providence';
 import { refreshProvidenceSidebar, registerProvidenceActorRefresh, registerProvidenceSidebar } from './sidebar';
 import type { SavedProvidenceRoll } from './pool';
+
+// Foundry v14 constructs the chat context menu before `ready`, so this hook must exist as soon as the module loads.
+registerProvidenceContextMenu();
 
 export interface ProvidenceApi {
   version: string;
@@ -12,6 +16,7 @@ export interface ProvidenceApi {
 
 Hooks.once('init', () => {
   registerProvidenceSidebar();
+  registerActorSelectionSetting();
   game.settings.register(MODULE_ID, 'saved-rolls', {
     name: `${MODULE_ID}.setting.savedRolls.name`,
     hint: `${MODULE_ID}.setting.savedRolls.hint`,
@@ -25,7 +30,6 @@ Hooks.once('init', () => {
 
 Hooks.once('ready', () => {
   registerProvidenceSocket();
-  registerProvidenceContextMenu();
   registerProvidenceActorRefresh();
   const module = game.modules.get(MODULE_ID);
   const version = module?.version ?? '0.0.0';

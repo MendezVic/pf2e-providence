@@ -1,4 +1,5 @@
 import { MODULE_ID } from './constants';
+import { getSelectedActorIds } from './selected-actors';
 import { getSavedRolls, rollProvidence } from './providence';
 import { groupSavedRolls, type SavedProvidenceRoll } from './pool';
 
@@ -63,8 +64,9 @@ export class ProvidenceSidebarTab extends AbstractSidebarTab {
     const list = document.createElement('ol');
     list.className = 'directory-list pf2e-providence-actor-list';
     const rollsByActor = groupSavedRolls(getSavedRolls());
+    const selectedActorIds = new Set(getSelectedActorIds());
     const actors = game.actors
-      .filter((actor) => actor.hasPlayerOwner && actor.testUserPermission(game.user, 'OWNER'))
+      .filter((actor) => selectedActorIds.has(actor.id))
       .sort((left, right) => left.name.localeCompare(right.name, game.i18n.lang));
 
     if (actors.length === 0) {
