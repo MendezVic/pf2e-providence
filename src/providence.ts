@@ -230,9 +230,9 @@ export async function rollProvidence(actor?: Actor | null): Promise<SavedProvide
   const roll = await new Roll('2d20').evaluate();
   const values = roll.dice.flatMap((die) => die.results.filter((result) => result.active).map((result) => result.result));
   const result = await updatePool({ action: 'add', actorUuid: source.uuid, values });
-  await ChatMessage.create({
+  await roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor: source }),
-    content: game.i18n.format(`${MODULE_ID}.chat.roll`, { actor: source.name, results: values.join(', ') }),
+    flavor: game.i18n.format(`${MODULE_ID}.chat.roll`, { actor: source.name, results: values.join(', ') }),
   });
   return result.added ?? [];
 }
