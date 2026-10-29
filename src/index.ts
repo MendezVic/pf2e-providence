@@ -1,7 +1,7 @@
 import './styles.css';
 import { MODULE_ID } from './constants';
 import { getSavedRolls, registerProvidenceContextMenu, registerProvidenceSocket, rollProvidence } from './providence';
-import { refreshProvidenceSidebar, registerProvidenceSidebar } from './sidebar';
+import { refreshProvidenceSidebar, registerProvidenceActorRefresh, registerProvidenceSidebar } from './sidebar';
 import type { SavedProvidenceRoll } from './pool';
 
 export interface ProvidenceApi {
@@ -26,6 +26,7 @@ Hooks.once('init', () => {
 Hooks.once('ready', () => {
   registerProvidenceSocket();
   registerProvidenceContextMenu();
+  registerProvidenceActorRefresh();
   const module = game.modules.get(MODULE_ID);
   const version = module?.version ?? '0.0.0';
   const api: ProvidenceApi = { version, roll: rollProvidence, getSavedRolls };
