@@ -11,13 +11,17 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Stamp manifest version from tag
+        shell: bash
+        run: node scripts/stamp-version.ts "${GITHUB_REF_NAME#v}"
       - run: npm run check
+      - run: npm test
       - run: npm run build
       - name: Create module archive
         run: |

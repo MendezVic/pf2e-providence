@@ -1,6 +1,6 @@
 {
   "name": "pf2e-providence",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Campaign-wide saved d20 rolls for Pathfinder 2e.",
@@ -12,12 +12,14 @@
     "build": "vite build",
     "dev": "vite",
     "watch": "vite build --watch",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^22.12.0",
     "foundry-pf2e": "github:7H3LaughingMan/foundry-pf2e#78aa843c39a59e06ede407a45ed1fd627169b5a3",
     "typescript": "^5.9.2",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0"
   }
 }

@@ -1,10 +1,47 @@
-.pf2e-powerful-sneak {
-  --pf2e-powerful-sneak-accent: #6b21a8;
+.pf2e-providence-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
 }
- .pf2e-providence-pool { display: grid; gap: 0.75rem; min-width: 18rem; }
- .pf2e-providence-actor h3 { margin: 0; font-size: 1rem; }
- .pf2e-providence-actor > div { display: flex; gap: 0.4rem; margin-top: 0.35rem; }
- .pf2e-providence-value { align-items: center; background: var(--color-cool-4, #526a77); border-radius: 999px; color: white; display: inline-flex; font-weight: bold; height: 1.8rem; justify-content: center; width: 1.8rem; }
- .pf2e-providence-sidebar { display: grid; gap: 0.5rem; padding: 0.75rem; }
- .pf2e-providence-sidebar p { margin: 0; }
- .pf2e-providence-sidebar h3 { margin: 0; }
+
+.pf2e-providence-sidebar > p,
+.pf2e-providence-sidebar h3,
+.pf2e-providence-sidebar h4 {
+  margin: 0;
+}
+
+.pf2e-providence-pool {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf2e-providence-actor {
+  border-block-end: 1px solid var(--color-border-light-primary);
+  padding-block-end: 0.5rem;
+}
+
+.pf2e-providence-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-block-start: 0.35rem;
+}
+
+.pf2e-providence-value {
+  align-items: center;
+  background: var(--color-bg-btn);
+  border: 1px solid var(--color-border-light-primary);
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 1.1rem;
+  font-weight: 700;
+  height: 2.2rem;
+  justify-content: center;
+  width: 2.2rem;
+}
+
+.pf2e-providence-empty {
+  font-style: italic;
+  opacity: 0.8;
+}

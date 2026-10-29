@@ -2,9 +2,21 @@
   "pf2e-providence": {
     "chat": { "roll": "Providence: {actor} saves d20 results: {results}." },
     "context": { "use": "Use a Providence Roll" },
-    "dialog": { "title": "Use a Providence Roll", "prompt": "Choose a saved d20 result to use for this reroll." },
-    "panel": { "empty": "No Providence rolls are currently saved." },
+    "dialog": { "title": "Use a Providence Roll", "prompt": "Choose a saved d20 result to use for this reroll.", "cancel": "Cancel" },
+    "panel": { "empty": "No Providence rolls are currently saved.", "savedBy": "Saved by {actor}" },
     "sidebar": { "title": "Providence", "description": "Roll two d20 for an actor or spend a saved result on any check.", "actor": "Actor", "roll": "Roll Providence (2d20)", "pool": "Saved Rolls" },
-    "error": { "noActor": "Choose an actor before rolling Providence.", "notCheck": "Providence can only be used on an unre-rolled PF2e check.", "noGm": "No active GM is available to update the Providence pool." }
+    "setting": { "savedRolls": { "name": "Providence saved rolls", "hint": "The campaign-wide pool of saved Providence d20 results." } },
+    "error": {
+      "noActor": "Choose an actor before rolling Providence.",
+      "notCheck": "Providence can only be used on an unre-rolled PF2e check.",
+      "noGm": "No active GM is available to update the Providence pool.",
+      "noPermission": "You do not have permission to perform that Providence action.",
+      "invalidRequest": "The Providence request was invalid.",
+      "invalidReservation": "That Providence reservation is no longer valid.",
+      "rollUnavailable": "That Providence roll is already in use or no longer available.",
+      "messageBusy": "That check is already being rerolled with Providence.",
+      "requestFailed": "The Providence request failed.",
+      "rerollFailed": "PF2e did not complete the expected Providence reroll. The saved result was restored."
+    }
   }
 }
